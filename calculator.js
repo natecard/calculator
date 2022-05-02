@@ -1,12 +1,22 @@
 let firstOperand = ''
 let currentOperation = ''
 let shouldResetScreen = false
+let secondOperand= ''
+let answer = ''
 
 //the operators for equations
-const add = (a,b) => a+b;
-const subtract = (a,b) => a-b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a/b;
+function add(a, b) {
+    return a + b
+}
+function subtract(a, b) {
+    return a - b
+}
+function multiply(a, b) {
+    return a * b
+}
+function divide(a, b) {
+    return a / b
+}
 const displays = document.getElementById("displays")
 const lowerDisplay = document.getElementById("lowerDisplay");
 const equal = document.getElementById("equal");
@@ -36,8 +46,26 @@ function resetScreen() {
 
 function setOperator(operator) {
     if (lowerDisplay.textContent != null)
-    currentOperation = operator.textContent;
-    firstOperand = lowerDisplay.textContent
+    operation = operator.id;
+    switch (operation) {
+        case "+":
+            currentOperation = "+"
+            break;
+        case "-":
+            currentOperation = "-"
+            break;
+        case "*":
+            currentOperation = "*"
+            break;
+        case "/":
+            currentOperation = "/"
+            break;
+        default:
+            resetScreen()
+            break;
+    }
+    numberOne = lowerDisplay.textContent;
+    firstOperand = numberOne
     topDisplay.textContent = `${firstOperand} ${currentOperation}`;
     resetScreen();
 }
@@ -47,25 +75,44 @@ function clearMemory() {
     topDisplay.textContent=''
     shouldResetScreen = false
 }
-
 clear.addEventListener("click", () => clearMemory());
 
-equal.addEventListener("click", () => operate(firstOperand, secondOperand, currentOperation));
-
-let secondOperand = `${lowerDisplay.textContent}`
+equal.addEventListener("click", () => operate());
 
 //takes user selected operator and processes equation 
-function operate(secondOperand, firstOperand, currentOperation) {
-    if (currentOperation==='÷') {
-        divide(firstOperand, secondOperand)
-    } else if (currentOperation==='x') {
-        multiply(firstOperand,secondOperand)
-    } else if (currentOperation==='-') {
-        subtract(firstOperand, secondOperand)
-    } else if (currentOperation==='+') {
-        add(firstOperand, secondOperand)
-    } else {
-        return null
+function operate(secondOperand, firstOperand) {
+    firstOperand = parseFloat(numberOne)
+    secondOperand = parseFloat(lowerDisplay.textContent)
+    setOperator(currentOperation)
+    switch (currentOperation) {
+        case "+":
+            answer = add(firstOperand, secondOperand)
+            answer = Math.round(answer*100)/100
+            lowerDisplay.textContent = answer
+            topDisplay.textContent = `${firstOperand} ${currentOperation} ${secondOperand}`
+            break;
+        case "-":
+            answer = subtract(firstOperand, secondOperand)
+            answer = Math.round(answer*100)/100
+            lowerDisplay.textContent = answer
+            topDisplay.textContent = `${firstOperand} ${currentOperation} ${secondOperand}`
+            break;
+        case "*":
+            answer = multiply(firstOperand, secondOperand)
+            answer = Math.round(answer*100)/100
+            lowerDisplay.textContent = answer
+            topDisplay.textContent = `${firstOperand} ${currentOperation} ${secondOperand}`
+            break;
+        case "/":
+            answer = divide(firstOperand, secondOperand)
+            answer = Math.round(answer*100)/100
+            lowerDisplay.textContent = answer
+            topDisplay.textContent = `${firstOperand} ${currentOperation} ${secondOperand}`
+            break;
+        default:
+            resetScreen()
+            break;
     }
-    console.log(firstOperand, currentOperation, secondOperand)
+    // console.log(firstOperand, currentOperation, secondOperand)
+    // console.log(typeof currentOperation)
 }
